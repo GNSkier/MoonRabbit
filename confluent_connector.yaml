@@ -1,0 +1,198 @@
+openapi: 3.0.0
+info:
+  title: National Weather Service API - Configurable Stations
+  version: 1.0.0
+  description: API for retrieving latest weather observation data for configurable stations
+
+servers:
+  - url: https://api.weather.gov
+
+paths:
+  /stations/{stationId1}/observations/latest:
+    get:
+      summary: Get latest weather observation for stationId1
+      parameters:
+        - name: stationId1
+          in: path
+          description: Station ID variable 1 (configurable)
+          required: true
+          schema:
+            type: string
+            example: PTAW1
+      responses:
+        '200':
+          description: Successful weather observation response
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Weather observation data
+      security: []
+
+  /stations/{stationId2}/observations/latest:
+    get:
+      summary: Get latest weather observation for stationId2
+      parameters:
+        - name: stationId2
+          in: path
+          description: Station ID variable 2 (configurable)
+          required: true
+          schema:
+            type: string
+            example: TCNW1
+      responses:
+        '200':
+          description: Successful weather observation response
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Weather observation data
+      security: []
+
+  /stations/{stationId3}/observations/latest:
+    get:
+      summary: Get latest weather observation for stationId3
+      parameters:
+        - name: stationId3
+          in: path
+          description: Station ID variable 3 (configurable)
+          required: true
+          schema:
+            type: string
+            example: FRDW1
+      responses:
+        '200':
+          description: Successful weather observation response
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Weather observation data
+      security: []
+
+  /stations/{stationId4}/observations/latest:
+    get:
+      summary: Get latest weather observation for stationId4
+      parameters:
+        - name: stationId4
+          in: path
+          description: Station ID variable 4 (configurable)
+          required: true
+          schema:
+            type: string
+            example: EBSW1
+      responses:
+        '200':
+          description: Successful weather observation response
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Weather observation data
+      security: []
+
+  /stations/{stationId5}/observations/latest:
+    get:
+      summary: Get latest weather observation for stationId5
+      parameters:
+        - name: stationId5
+          in: path
+          description: Station ID variable 5 (configurable)
+          required: true
+          schema:
+            type: string
+            example: SDBC1
+      responses:
+        '200':
+          description: Successful weather observation response
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Weather observation data
+      security: []
+
+  /stations/{stationId6}/observations/latest:
+    get:
+      summary: Get latest weather observation for stationId6
+      parameters:
+        - name: stationId6
+          in: path
+          description: Station ID variable 6 (configurable)
+          required: true
+          schema:
+            type: string
+            example: OHBC1
+      responses:
+        '200':
+          description: Successful weather observation response
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Weather observation data
+      security: []
+
+  /stations/{stationId7}/observations/latest:
+    get:
+      summary: Get latest weather observation for stationId7
+      parameters:
+        - name: stationId7
+          in: path
+          description: Station ID variable 7 (configurable)
+          required: true
+          schema:
+            type: string
+            example: ICAC1
+      responses:
+        '200':
+          description: Successful weather observation response
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Weather observation data
+      security: []
+
+  /stations/{stationId8}/observations/latest:
+    get:
+      summary: Get latest weather observation for stationId8
+      parameters:
+        - name: stationId8
+          in: path
+          description: Station ID variable 8 (configurable)
+          required: true
+          schema:
+            type: string
+            example: FTPC1
+      responses:
+        '200':
+          description: Successful weather observation response
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Weather observation data
+      security: []
+
+  /stations/{stationId9}/observations/latest:
+    get:
+      summary: Get latest weather observation for stationId9
+      parameters:
+        - name: stationId9
+          in: path
+          description: Station ID variable 9 (configurable)
+          required: true
+          schema:
+            type: string
+            example: ANTA2
+      responses:
+        '200':
+          description: Successful weather observation response
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Weather observation data
+      security: []
