@@ -168,3 +168,43 @@ resource "google_bigquery_table" "NWS_observations_table"{
         ])
 
     }
+
+resource "google_bigquery_dataset" "yfi"{
+    count = var.bigquery_dataset_yf && var.create_bigquery_dataset_yf != "" ? 1  :0
+    dataset_id = var.bigquery_dataset_yf
+    project = var.project_id
+    location = var.region
+
+    # Explicit dependency to ensure APIs are ready FIRST
+    depends_on = [time_sleep.wait_for_api_propagation]
+
+    labels = {
+        environemnt = "development"
+        managed-by = "terraform"
+    }
+}
+
+resource "google_bigquery_table" "NWS_observations_table"{
+    count = var.bigquery_table_NWS && var.create_bigquery_table_NWS != "" ? 1:0
+    table_id = var.create_bigquery_table_NWS
+    dataset_id = var.bigquery_dataset_NWS
+    project = var.project_id
+
+    schema = jsonencode ([
+        {
+            name = "ingest_timestamp"
+            type = "TIMESTAMP"
+            mode = "NULLABLE"
+        },
+        {
+            name = "ticker"
+            type = "STRING"
+            mode = "NULLABLE"
+        },
+        {
+            name = "info"
+            type = "JSON"
+            mode = "NULLABLE"
+        }
+        ])
+    }
