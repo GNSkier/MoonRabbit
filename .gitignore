@@ -2,6 +2,10 @@
 *.zip
 *.xlsx
 *.csv
+*.txt
+*.json
+*.grib2
+*.idx
 
 # terraform ignore files
 **/.terraform/
