@@ -2,3 +2,10 @@
 *.zip
 *.xlsx
 *.csv
+
+# terraform ignore files
+**/.terraform/
+**/*.tfstate
+**/*.tfstate.backup
+**/*.tfstate*
+**/*.tfvars
