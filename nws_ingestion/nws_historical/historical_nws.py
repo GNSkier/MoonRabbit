@@ -3,93 +3,9 @@ import requests
 import json
 from datetime import datetime
 from meteostat import Point, Hourly
-import logging
-from requests.exceptions import RequestException
+from tqdm import tqdm
 
-
-def get_noaa_obs_station(lat, lon):
-    """Get the NOAA observation station for a given latitude and longitude."""
-    url = f"https://api.weather.gov/points/{lat},{lon}/stations"
-    try:
-        response = requests.get(url, timeout=15)
-        response.raise_for_status()
-        return response.json()
-    except RequestException as e:
-        logging.warning(
-            "Station lookup request failed for (%s, %s): %s", lat, lon, e
-        )
-        return None
-    except ValueError as e:
-        logging.warning(
-            "Station lookup returned invalid JSON for (%s, %s): %s", lat, lon, e
-        )
-        return None
-
-
-def get_historical_nws(start_date: datetime, end_date: datetime):
-    path = "../NWS_station_finding/state_coordinates.txt"
-    try:
-        with open(path, "r") as f:
-            state_to_coords = json.load(f)
-    except FileNotFoundError:
-        logging.error("Coordinates file not found at path: %s", path)
-        return pd.DataFrame()
-    except json.JSONDecodeError as e:
-        logging.error("Coordinates file is not valid JSON: %s", e)
-        return pd.DataFrame()
-
-    dfs = []
-    for state, coords in state_to_coords.items():
-        logging.info("Processing state: %s", state)
-        for coord in coords:
-            lon, lat = coord
-            try:
-                location = Point(lat, lon)
-                data = Hourly(location, start=start_date, end=end_date).fetch()
-                data = data.reset_index()
-            except Exception as e:
-                logging.warning(
-                    "Failed Meteostat fetch for lat=%s lon=%s: %s", lat, lon, e
-                )
-                continue
-
-            station_id = None
-            try:
-                response = get_noaa_obs_station(lat, lon)
-                if response and response.get("features"):
-                    api_link = str(response["features"][0]["id"])
-                    station_id = api_link.rstrip("/").rsplit("/", 1)[-1]
-                else:
-                    logging.warning(
-                        "No station features found for lat=%s lon=%s", lat, lon
-                    )
-            except Exception as e:
-                logging.warning(
-                    "Station id extraction failed for lat=%s lon=%s: %s",
-                    lat,
-                    lon,
-                    e,
-                )
-
-            data["lon"] = lon
-            data["lat"] = lat
-            data["station_id"] = station_id
-            dfs.append(data)
-
-    if not dfs:
-        logging.warning(
-            "No data collected from any coordinates; returning empty DataFrame."
-        )
-        return pd.DataFrame()
-
-    stack_df = pd.concat(dfs, axis=0, ignore_index=True)
-    historical_weather_df = stack_df.drop(columns=["index"], errors="ignore")
-    return historical_weather_df
-
-
-def map_weather_code_coco(weather_df: pd.DataFrame) -> pd.DataFrame:
-    """Map the weather code to the corresponding weather condition."""
-    coco_mapping = {
+coco_mapping = {
         1: "Clear",
         2: "Fair (mostly clear)",
         3: "Partly Cloudy",
@@ -106,74 +22,88 @@ def map_weather_code_coco(weather_df: pd.DataFrame) -> pd.DataFrame:
         27: "Storm Conditions",
     }
 
-    try:
-        if "coco" not in weather_df.columns:
-            logging.warning(
-                "Column 'coco' not found; adding empty 'weather_condition'."
-            )
-            weather_df["weather_condition"] = None
-            return weather_df
-        weather_df["weather_condition"] = weather_df["coco"].map(coco_mapping)
-        return weather_df.drop(columns=["coco"])
-    except Exception as e:
-        logging.warning("Failed to map 'coco' to weather_condition: %s", e)
-        return weather_df
+def get_noaa_obs_station(lat, lon):
+    """Get the NOAA observation station for a given latitude and longitude."""
+    url = f"https://api.weather.gov/points/{lat},{lon}/stations"
+    response = requests.get(url, timeout=30)
+    response.raise_for_status()
+    return response.json()
+
+def pull_historical_weather(path:str):
+    """Function to pull historical weather data using meteostat
+
+    Args:
+        path (str): pathway to text file housing longitude and latitude coordinates.
+    Returns: 
+        output (list): list of dataframes for weather data. 
+    """
+    with open(path, "r") as f:
+        state_to_coords = json.load(f)
+    output = []
+    for state, coords in state_to_coords.items():
+        print(state)
+        for coord in tqdm(coords):
+            lon, lat = coord
+            start = datetime(2020, 1, 1)
+            end = datetime(2025, 11, 1)
+            location = Point(lat, lon)
+            data = Hourly(location, start=start, end=end).fetch()
+            data = data.reset_index()
+            data["lon"] = lon
+            data["lat"] = lat
+            output.append(data)
+    return output
+
+def find_noaa_stations(weather_df:pd.DataFrame):
+
+    weather_df_stations = weather_df.copy()
+    lat_lons = []
+    for lat, lon in zip(weather_df_stations["lat"], weather_df_stations["lon"]):
+        if (lat, lon) not in lat_lons:
+            lat_lons.append((lat, lon))
+            response = get_noaa_obs_station(lat, lon)
+            api_link = str(response["features"][0]["id"])
+            station_id = api_link.rstrip("/").rsplit("/", 1)[-1]
+            weather_df_stations.loc[
+                (weather_df_stations["lat"] == lat)
+                & (weather_df_stations["lon"] == lon),
+                "station_id",
+            ] = station_id
+    return weather_df_stations
 
 
 if __name__ == "__main__":
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s %(levelname)s %(name)s - %(message)s",
+    path = "../NWS_station_finding/state_coordinates.txt"
+    weather_list = pull_historical_weather(path)
+
+    stack_df = pd.concat(weather_list, axis=0, ignore_index=True)
+
+    combined_weather = pd.concat(weather_list, axis=0, ignore_index=True)
+    combined_weather["weather_condition"] = combined_weather["coco"].map(
+        coco_mapping
     )
-    start_date = datetime(2020, 1, 1)
-    end_date = datetime(2025, 11, 1)
-    try:
-        historical_weather_df = get_historical_nws(start_date, end_date)
-    except Exception as e:
-        logging.error("Uncaught error during historical fetch: %s", e)
-        historical_weather_df = pd.DataFrame()
-
-    if historical_weather_df.empty:
-        logging.warning(
-            "Historical DataFrame is empty; skipping mapping and export."
-        )
-    else:
-        try:
-            historical_weather_df_coded = map_weather_code_coco(
-                historical_weather_df
-            )
-        except Exception as e:
-            logging.error("Failed to map weather codes: %s", e)
-            historical_weather_df_coded = historical_weather_df
-
-        try:
-            historical_weather_df_coded = historical_weather_df_coded[
-                [
-                    "time",
-                    "station_id",
-                    "lat",
-                    "lon",
-                    "temp",
-                    "dwpt",
-                    "rhum",
-                    "prcp",
-                    "snow",
-                    "wdir",
-                    "wspd",
-                    "wpgt",
-                    "pres",
-                    "tsun",
-                    "weather_condition",
-                ]
-            ]
-        except KeyError as e:
-            logging.warning(
-                "Some expected columns missing during selection: %s", e
-            )
-
-        try:
-            historical_weather_df_coded.to_json(
-                "data/historical_weather_df_coded.json", index=False
-            )
-        except OSError as e:
-            logging.error("Failed to write output JSON: %s", e)
+    historical_weather_df = find_noaa_stations(combined_weather)
+    historical_weather_df = historical_weather_df[
+        [
+            "time",
+            "station_id",
+            "lat",
+            "lon",
+            "temp",
+            "dwpt",
+            "rhum",
+            "prcp",
+            "wdir",
+            "wspd",
+            "wpgt",
+            "pres",
+            "weather_condition",
+        ]
+    ]
+    historical_weather_df.to_parquet(
+        "data/historical_weather_df.parquet",
+        engine="pyarrow",
+        coerce_timestamps="us",
+        allow_truncated_timestamps=True,
+        index=False,
+    )
