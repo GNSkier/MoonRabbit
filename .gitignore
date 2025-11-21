@@ -6,6 +6,7 @@
 *.json
 *.grib2
 *.idx
+*.parquet
 
 # terraform ignore files
 **/.terraform/
