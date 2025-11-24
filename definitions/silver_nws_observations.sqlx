@@ -24,7 +24,7 @@ config {
 -- The rest of a SQLX file contains your SELECT statement used to create the table.
 
 SELECT 
-  time AS timestamp,
+  timestamp AS timestamp,
   station_id AS stationId,
   lat AS latitude,
   lon AS longitude,
