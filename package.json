@@ -1,0 +1,7 @@
+{
+  "name": "moonrabbit-testing",
+  "version": "1.0.0",
+  "dependencies": {
+    "@dataform/core": "latest" 
+  }
+}
