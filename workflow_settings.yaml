@@ -1,0 +1,4 @@
+defaultProject: weatherimpact-476122
+defaultDataset: NWS_API
+defaultAssertionDataset: dataform_assertions
+dataformCoreVersion: 3.0.35

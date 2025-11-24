@@ -14,3 +14,6 @@
 **/*.tfstate.backup
 **/*.tfstate*
 **/*.tfvars
+
+# Dataform Pipelien
+node_modules/
