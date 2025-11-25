@@ -30,7 +30,7 @@ ${when(!incremental(), `
 SELECT
   timestamp,
   stationId,
-  NULL AS stationName
+  NULL AS stationName,
   latitude,
   longitude,
   temperature,
