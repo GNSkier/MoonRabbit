@@ -45,16 +45,16 @@ UNION ALL
 
 -- This block always runs, forming the core SELECT statement.
 SELECT DISTINCT
-  timestamp AS timestamp,
-  stationId AS stationId,
-  stationName AS stationName,
-  lat AS latitude,
-  lon AS longitude,
-  temp AS temperature,
-  humidity AS humidity,
-  precip_3hr AS precipitation,
-  wind_speed AS wind_speed,
-  pressure_pa AS pressure
+  timestamp,
+  stationId,
+  stationName,
+  latitude,
+  longitude,
+  temperature,
+  humidity,
+  precipitation,
+  wind_speed,
+  pressure
 FROM
   `weatherimpact-476122.NWS_API.silver_nws_observations`
 
