@@ -28,7 +28,7 @@ WITH cleaned AS (
     quoteType,
     timezone,
     FORMAT_TIMESTAMP('%Y-%m-%d', ingest_timestamp) AS ingest_date
-  FROM ${ref("soyb_raw")}
+  FROM `yfinance_data.soyb_raw`
   WHERE ticker IS NOT NULL
 )
 SELECT * FROM cleaned
