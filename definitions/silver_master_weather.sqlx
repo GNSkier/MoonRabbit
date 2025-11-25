@@ -2,8 +2,9 @@ config {
   type: "incremental",
   uniqueKey: ["timestamp", "stationId"], 
   bigquery: {
-    partitionBy: "DATE(timestamp)" 
-  },
+      partitionBy: "DATE(timestamp)", 
+      clusterBy: ["stationId"]
+    },
   dependencies: [
     "silver_nws_observations" 
   ],
