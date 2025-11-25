@@ -40,4 +40,4 @@ SELECT DISTINCT
   pressure_pa AS pressure
 FROM 
   `weatherimpact-476122.NWS_API.bronze_NWS_API_observations`
-${when(incremental(), `where time > (select max(time) from ${self()})`)}
+${when(incremental(), `where timestamp > (select max(timestamp) from ${self()})`)}
