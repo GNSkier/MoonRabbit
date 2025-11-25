@@ -1,8 +1,7 @@
 config {
   type: "incremental",
   tags: ["silver"],
-  uniqueKey: "ingest_timestamp",
-  incrementalQuery: true
+  uniqueKey: ["ingest_timestamp"]
 }
 
 WITH cleaned AS (
@@ -32,4 +31,4 @@ WITH cleaned AS (
   WHERE ticker IS NOT NULL
 )
 SELECT * FROM cleaned
-ORDER BY ingest_timestamp;
+ORDER BY ingest_timestamp
