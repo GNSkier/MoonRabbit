@@ -28,7 +28,7 @@ config {
 
 ${when(!incremental(), `
 SELECT
-  time AS timestamp,
+  timestamp AS timestamp,
   station_id AS stationId,
   NULL AS stationName, -- Standardizing schema for the missing column
   lat AS latitude,
