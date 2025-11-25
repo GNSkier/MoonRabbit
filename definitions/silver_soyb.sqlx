@@ -1,7 +1,8 @@
 config {
   type: "incremental",
   tags: ["silver"],
-  uniqueKey: ["ingest_timestamp"]
+  uniqueKey: ["ingest_timestamp"],
+  schema: "yfinance_data"
 }
 
 WITH cleaned AS (
