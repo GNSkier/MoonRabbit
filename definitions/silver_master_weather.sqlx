@@ -28,16 +28,16 @@ config {
 
 ${when(!incremental(), `
 SELECT
-  timestamp AS timestamp,
-  station_id AS stationId,
-  NULL AS stationName, -- Standardizing schema for the missing column
-  lat AS latitude,
-  lon AS longitude,
-  temp AS temperature,
-  rhum AS humidity,
-  prcp AS precipitation,
-  wspd AS wind_speed,
-  pres AS pressure
+  timestamp,
+  stationId,
+  NULL AS stationName
+  latitude,
+  longitude,
+  temperature,
+  humidity,
+  precipitation,
+  wind_speed,
+  pressure
 FROM
   \`weatherimpact-476122.NWS_API.silver_weather_historical\`
 UNION ALL
