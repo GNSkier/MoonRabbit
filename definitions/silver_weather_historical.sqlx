@@ -29,4 +29,4 @@ SELECT
   wspd AS wind_speed,
   pres AS pressure
 FROM 
-  `weatherimpact-476122.NWS_API.bronze_historic_weather`
+  `weatherimpact-476122.NWS_API2.bronze_historic_weather`

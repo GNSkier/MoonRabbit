@@ -40,5 +40,5 @@ SELECT DISTINCT
   wind_speed AS wind_speed,
   pressure_pa AS pressure
 FROM 
-  `weatherimpact-476122.NWS_API.bronze_NWS_API_observations`
+  `weatherimpact-476122.NWS_API2.bronze_NWS_API_observations`
 ${when(incremental(), `where timestamp > (select max(timestamp) from ${self()})`)}

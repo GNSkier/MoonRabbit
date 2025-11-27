@@ -56,7 +56,7 @@ SELECT DISTINCT
   wind_speed,
   pressure
 FROM
-  `weatherimpact-476122.NWS_API.silver_nws_observations`
+  `weatherimpact-476122.NWS_API2.silver_nws_observations`
 
 -- 3. INCREMENTAL FILTER: Filters the streaming data for efficiency.
 ${when(incremental(), `WHERE timestamp > (SELECT MAX(timestamp) FROM ${self()})`)}
