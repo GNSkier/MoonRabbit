@@ -15,7 +15,7 @@ config {
     wind_speed: "Wind speed at time of recording in Kilometers.",
     pressure: "Atomospheric pressure measured in Pascals"
     },
-  schema: "NWS_API"
+  schema: "NWS_API2"
 }
 
 SELECT 

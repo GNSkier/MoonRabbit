@@ -20,7 +20,7 @@ config {
     wind_speed: "Wind speed at time of recording in Kilometers.",
     pressure: "Atomospheric pressure measured in Pascals"
     },
-  schema: "NWS_API"
+  schema: "NWS_AP2I"
 }
 
 -- 1. If it is the FIRST RUN (!incremental), start with the historical data.
@@ -39,7 +39,7 @@ SELECT
   wind_speed,
   pressure
 FROM
-  \`weatherimpact-476122.NWS_API.silver_weather_historical\`
+  \`weatherimpact-476122.NWS_API2.silver_weather_historical\`
 UNION ALL
 `)}
 
