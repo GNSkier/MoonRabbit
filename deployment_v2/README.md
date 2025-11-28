@@ -1,4 +1,4 @@
-# Deployment of Commodity Predictor
+# Deployment of Commodity Predictor Using Terraform
 ## Team Moon Rabbit: Helen Lin, Grant Nitta
 
 ### Objective:
@@ -9,3 +9,15 @@ Terraform is a core component in the Continuous Integration/Continuous Deploymen
 Configurations are made highly customizable and environment-agnostic through the use of `.tfvars` files. A key safety feature is the execution plan generated prior to deployment, which clearly details all intended changes. Once deployed, a state file tracks the live infrastructure, providing accurate information for planning subsequent updates and preventing configuration drift. Finally, Terraform’s ability to automatically generate a dependency graph ensures all cloud resources are created and configured in the precise order required.
 
 ### Evidence of Succesfull Deployment
+
+- `./proof/terraform_init` Image of a successfull `terraform init` command.
+- `./proof/terraform_init_output.txt` Output of a successfull `terraform init` command.
+- `./proof/terraform_plan` Image of a successfull `terraform plan` command.
+- `./proof/terraform_plan_output.txt` Output of a successfull `terraform plan` command.
+- `./proof/terraform_apply` Image of a successfull `terraform apply` command.
+- `./proof/terraform_apply_output.txt` Output of a successfull `terraform apply` command.
+
+
+- `./terraform_gcp_bucket.png` Image of GCP buckets created by terraform.
+- `./terraform_bigquery.png` Image of Bigquery resources created by terraform.
+- `./terraform_cloud_run.png` Image of Cloud Run resources created by terraform. 
