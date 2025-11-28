@@ -1,0 +1,35 @@
+config {
+  type: "incremental",
+  tags: ["silver"],
+  uniqueKey: ["ingest_timestamp"],
+  schema: "yfinance_data"
+}
+
+WITH cleaned AS (
+  SELECT
+    ingest_timestamp,
+    ticker,
+    SAFE_CAST(dayHigh AS FLOAT64) AS dayHigh,
+    SAFE_CAST(dayLow AS FLOAT64) AS dayLow,
+    SAFE_CAST(fiftyDayAverage AS FLOAT64) AS fiftyDayAverage,
+    SAFE_CAST(lastPrice AS FLOAT64) AS lastPrice,
+    SAFE_CAST(lastVolume AS INT64) AS lastVolume,
+    SAFE_CAST(open AS FLOAT64) AS open,
+    SAFE_CAST(previousClose AS FLOAT64) AS previousClose,
+    SAFE_CAST(regularMarketPreviousClose AS FLOAT64) AS regularMarketPreviousClose,
+    SAFE_CAST(tenDayAverageVolume AS INT64) AS tenDayAverageVolume,
+    SAFE_CAST(threeMonthAverageVolume AS INT64) AS threeMonthAverageVolume,
+    SAFE_CAST(twoHundredDayAverage AS FLOAT64) AS twoHundredDayAverage,
+    SAFE_CAST(yearChange AS FLOAT64) AS yearChange,
+    SAFE_CAST(yearHigh AS FLOAT64) AS yearHigh,
+    SAFE_CAST(yearLow AS FLOAT64) AS yearLow,
+    exchange,
+    currency,
+    quoteType,
+    timezone,
+    FORMAT_TIMESTAMP('%Y-%m-%d', ingest_timestamp) AS ingest_date
+  FROM `yfinance_data.soyb_raw`
+  WHERE ticker IS NOT NULL
+)
+SELECT * FROM cleaned
+ORDER BY ingest_timestamp
