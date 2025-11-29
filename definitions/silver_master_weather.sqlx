@@ -20,7 +20,7 @@ config {
     wind_speed: "Wind speed at time of recording in Kilometers.",
     pressure: "Atomospheric pressure measured in Pascals"
     },
-  schema: "NWS_AP2I"
+  schema: "NWS_API2"
 }
 
 -- 1. If it is the FIRST RUN (!incremental), start with the historical data.
